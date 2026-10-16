@@ -1,44 +1,2986 @@
-<!DOCTYPE html>
+==================== FILE: package.json ====================
+{
+  "name": "vite-react-typescript-starter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
+    "lucide-react": "^0.446.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2"
+  }
+}
+
+
+==================== FILE: vite.config.ts ====================
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath, URL } from 'node:url';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  base: './',
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  optimizeDeps: {
+    exclude: ['lucide-react'],
+  },
+});
+
+
+==================== FILE: tailwind.config.js ====================
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        accent: {
+          emerald: '#10b981',
+          cyan: '#06b6d4',
+          terminal: '#22c55e',
+        },
+      },
+      fontFamily: {
+        mono: ['IBM Plex Mono', 'Consolas', 'monospace'],
+        sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
+        serif: ['Newsreader', 'Georgia', 'serif'],
+      },
+      animation: {
+        'pulse-dot': 'pulse-dot 2s ease-in-out infinite',
+        'blink': 'blink 1s steps(2) infinite',
+        'fade-in': 'fade-in 0.3s cubic-bezier(0.4,0,0.2,1)',
+        'slide-up': 'slide-up 0.3s cubic-bezier(0.4,0,0.2,1)',
+        'slide-right': 'slide-right 0.3s cubic-bezier(0.4,0,0.2,1)',
+        'cursor-blink': 'cursor-blink 1s steps(2) infinite',
+        'flow-pulse': 'flow-pulse 1.5s cubic-bezier(0.4,0,0.2,1) infinite',
+        'float-equation': 'float-equation 8s ease-in-out infinite',
+        'draw-line': 'draw-line 4s ease-in-out infinite',
+        'rotate-slow': 'rotate-slow 60s linear infinite',
+        'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+        'drift': 'drift 20s linear infinite',
+      },
+      keyframes: {
+        'pulse-dot': {
+          '0%, 100%': { opacity: '0.6' },
+          '50%': { opacity: '1' },
+        },
+        'blink': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.15' },
+        },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'slide-up': {
+          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'slide-right': {
+          '0%': { opacity: '0', transform: 'translateX(-8px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        'cursor-blink': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' },
+        },
+        'flow-pulse': {
+          '0%, 100%': { opacity: '0.3', transform: 'scaleX(0.95)' },
+          '50%': { opacity: '1', transform: 'scaleX(1)' },
+        },
+        'float-equation': {
+          '0%, 100%': { opacity: '0.08', transform: 'translateY(0)' },
+          '50%': { opacity: '0.22', transform: 'translateY(-6px)' },
+        },
+        'draw-line': {
+          '0%': { strokeDashoffset: '200' },
+          '50%': { strokeDashoffset: '0' },
+          '100%': { strokeDashoffset: '-200' },
+        },
+        'rotate-slow': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        'pulse-glow': {
+          '0%, 100%': { opacity: '0.3' },
+          '50%': { opacity: '0.8' },
+        },
+        'drift': {
+          '0%': { transform: 'translate(0, 0)' },
+          '100%': { transform: 'translate(-40px, -40px)' },
+        },
+      },
+    },
+  },
+  plugins: [],
+};
+
+
+==================== FILE: postcss.config.js ====================
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+
+==================== FILE: eslint.config.js ====================
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  }
+);
+
+
+==================== FILE: tsconfig.json ====================
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+
+
+==================== FILE: tsconfig.app.json ====================
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Path alias — depth-invariant imports for src (@/foo === src/foo from any file) */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}
+
+
+==================== FILE: tsconfig.node.json ====================
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["vite.config.ts"]
+}
+
+
+==================== FILE: index.html ====================
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vector Calculus Lab — Interactive Live Presentation Suite</title>
-  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
-  <style>
-    @keyframes aurora {
-      0% { transform: scale(1) translate(0px, 0px) rotate(0deg); }
-      50% { transform: scale(1.15) translate(25px, -15px) rotate(5deg); }
-      100% { transform: scale(0.95) translate(-20px, 20px) rotate(-4deg); }
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vector Calculus Lab</title>
+    <meta property="og:image" content="https://bolt.new/static/og_default.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+==================== FILE: .gitignore ====================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env
+
+
+==================== FILE: .github/workflows/deploy.yml ====================
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+
+==================== FILE: src/App.tsx ====================
+import { useState } from 'react';
+import Header, { type TabId } from '@/components/Header';
+import ManualView from '@/components/ManualView';
+import SimulationView from '@/components/SimulationView';
+import LiveCodingTerminal from '@/components/LiveCodingTerminal';
+import MathBackground from '@/components/MathBackground';
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState<TabId>('manual');
+
+  return (
+    <div className="min-h-screen relative">
+      <MathBackground />
+      <Header activeTab={activeTab} onTabChange={setActiveTab} />
+      <main className="relative z-10">
+        {activeTab === 'manual' && <ManualView />}
+        {activeTab === 'simulation' && <SimulationView />}
+        {activeTab === 'console' && <LiveCodingTerminal />}
+      </main>
+    </div>
+  );
+}
+
+
+==================== FILE: src/components/ArchitectureFlow.tsx ====================
+import { ArrowRight, Terminal, Cpu, FileOutput, Keyboard } from 'lucide-react';
+
+export type FlowStep = 'idle' | 'input' | 'executing' | 'output' | 'error';
+
+interface ArchitectureFlowProps {
+  step: FlowStep;
+  executionTime: number | null;
+}
+
+const steps: {
+  id: FlowStep;
+  icon: typeof Keyboard;
+  label: string;
+  detail: string;
+}[] = [
+  { id: 'input', icon: Keyboard, label: 'User Input', detail: 'Query received at prompt' },
+  { id: 'executing', icon: Cpu, label: 'Sandboxed Web Worker', detail: 'Isolated execution context' },
+  { id: 'output', icon: FileOutput, label: 'Terminal Output', detail: 'stdout captured & rendered' },
+];
+
+function stepIndex(step: FlowStep): number {
+  if (step === 'idle') return -1;
+  if (step === 'error') return 2;
+  return steps.findIndex((s) => s.id === step);
+}
+
+export default function ArchitectureFlow({ step, executionTime }: ArchitectureFlowProps) {
+  const activeIdx = stepIndex(step);
+  const isError = step === 'error';
+
+  return (
+    <div className="panel p-5">
+      <div className="flex items-center gap-2 mb-1">
+        <Terminal className="w-4 h-4 text-cyan-400" />
+        <h3 className="section-header">Backend Pipeline</h3>
+      </div>
+      <p className="text-xs text-neutral-500 mb-5">
+        How the live execution environment processes your query
+      </p>
+
+      <div className="space-y-0">
+        {steps.map((s, idx) => {
+          const Icon = s.icon;
+          const isActive = activeIdx === idx;
+          const isPast = activeIdx > idx;
+          const isErrorStep = isError && idx === 2;
+
+          return (
+            <div key={s.id}>
+              <div
+                className={`flex items-center gap-3 p-3 rounded border transition-all duration-300 ${
+                  isActive
+                    ? 'border-emerald-600/50 bg-emerald-950/20'
+                    : isErrorStep
+                      ? 'border-red-600/50 bg-red-950/20'
+                      : isPast
+                        ? 'border-neutral-800 bg-neutral-900/20'
+                        : 'border-neutral-800/60 bg-neutral-900/10'
+                }`}
+              >
+                <div
+                  className={`w-9 h-9 rounded border flex items-center justify-center shrink-0 transition-colors duration-300 ${
+                    isActive
+                      ? 'border-emerald-600/50 text-emerald-400'
+                      : isErrorStep
+                        ? 'border-red-600/50 text-red-400'
+                        : isPast
+                          ? 'border-neutral-700 text-neutral-500'
+                          : 'border-neutral-800 text-neutral-600'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div
+                    className={`text-sm font-medium transition-colors duration-300 ${
+                      isActive
+                        ? 'text-emerald-300'
+                        : isErrorStep
+                          ? 'text-red-300'
+                          : isPast
+                            ? 'text-neutral-400'
+                            : 'text-neutral-600'
+                    }`}
+                  >
+                    {s.label}
+                  </div>
+                  <div className="text-xs text-neutral-600 font-mono">{s.detail}</div>
+                </div>
+                {isActive && (
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-dot shrink-0" />
+                )}
+                {isPast && !isActive && !isErrorStep && (
+                  <div className="text-xs font-mono text-neutral-600 shrink-0">done</div>
+                )}
+                {isErrorStep && (
+                  <div className="text-xs font-mono text-red-400 shrink-0">fail</div>
+                )}
+              </div>
+
+              {idx < steps.length - 1 && (
+                <div className="flex justify-start pl-7 py-1">
+                  <div
+                    className={`w-px h-4 transition-colors duration-300 ${
+                      isPast ? 'bg-neutral-700' : 'bg-neutral-800'
+                    }`}
+                  />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {executionTime !== null && (
+        <div className="mt-4 pt-4 border-t border-neutral-800/60">
+          <div className="flex items-center justify-between">
+            <span className="section-label">Execution Time</span>
+            <span className="text-sm font-mono font-bold text-emerald-400 tabular-nums">
+              {executionTime}ms
+            </span>
+          </div>
+        </div>
+      )}
+
+      <div className="mt-4 flex items-center gap-2 text-xs text-neutral-600 font-mono">
+        <ArrowRight className="w-3 h-3" />
+        <span>User Input -&gt; Sandboxed Worker -&gt; Isolated Output String</span>
+      </div>
+    </div>
+  );
+}
+
+
+==================== FILE: src/components/CodeHighlighter.tsx ====================
+import { useMemo } from 'react';
+
+interface CodeHighlighterProps {
+  code: string;
+  className?: string;
+}
+
+interface Token {
+  text: string;
+  type: 'keyword' | 'string' | 'number' | 'comment' | 'function' | 'operator' | 'plain';
+}
+
+const KEYWORDS = new Set([
+  'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while',
+  'do', 'switch', 'case', 'break', 'continue', 'new', 'typeof', 'instanceof',
+  'class', 'extends', 'super', 'this', 'true', 'false', 'null', 'undefined',
+  'try', 'catch', 'finally', 'throw', 'import', 'export', 'default', 'async',
+  'await', 'yield', 'of', 'in',
+]);
+
+const BUILTIN_FUNCS = new Set([
+  'Math', 'JSON', 'console', 'Array', 'Object', 'String', 'Number',
+  'sqrt', 'pow', 'sin', 'cos', 'tan', 'log', 'exp', 'abs', 'floor', 'ceil',
+  'round', 'max', 'min', 'random', 'PI', 'E', 'log2', 'log10',
+  'parse', 'stringify', 'keys', 'values', 'entries', 'from',
+  'push', 'pop', 'map', 'filter', 'reduce', 'forEach', 'sort', 'slice',
+  'join', 'split', 'replace', 'match', 'test', 'floor',
+]);
+
+function tokenizeLine(line: string): Token[] {
+  const tokens: Token[] = [];
+  let i = 0;
+  const len = line.length;
+
+  while (i < len) {
+    const ch = line[i];
+
+    // Comments
+    if (ch === '/' && line[i + 1] === '/') {
+      tokens.push({ text: line.slice(i), type: 'comment' });
+      break;
     }
-    @keyframes spinSlow {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+
+    // Strings
+    if (ch === '"' || ch === "'" || ch === '`') {
+      const quote = ch;
+      let j = i + 1;
+      while (j < len && line[j] !== quote) {
+        if (line[j] === '\\') j++;
+        j++;
+      }
+      tokens.push({ text: line.slice(i, j + 1), type: 'string' });
+      i = j + 1;
+      continue;
     }
-    .animate-aurora {
-      animation: aurora 14s ease-in-out infinite alternate;
+
+    // Numbers
+    if (/[0-9]/.test(ch) || (ch === '.' && /[0-9]/.test(line[i + 1]))) {
+      let j = i;
+      while (j < len && /[0-9.eE+\-]/.test(line[j])) {
+        if ((line[j] === '+' || line[j] === '-') && !/[eE]/.test(line[j - 1])) break;
+        j++;
+      }
+      tokens.push({ text: line.slice(i, j), type: 'number' });
+      i = j;
+      continue;
     }
-    .animate-spin-slow {
-      animation: spinSlow 20s linear infinite;
+
+    // Identifiers / keywords
+    if (/[a-zA-Z_$]/.test(ch)) {
+      let j = i;
+      while (j < len && /[a-zA-Z0-9_$]/.test(line[j])) j++;
+      const word = line.slice(i, j);
+      if (KEYWORDS.has(word)) {
+        tokens.push({ text: word, type: 'keyword' });
+      } else if (BUILTIN_FUNCS.has(word)) {
+        tokens.push({ text: word, type: 'function' });
+      } else if (line[j] === '(') {
+        tokens.push({ text: word, type: 'function' });
+      } else {
+        tokens.push({ text: word, type: 'plain' });
+      }
+      i = j;
+      continue;
     }
-    .glow-cyan {
-      box-shadow: 0 0 25px rgba(34, 211, 238, 0.25), 0 0 50px rgba(34, 211, 238, 0.08);
+
+    // Operators
+    if (/[+\-*/%=<>!&|^~?:]/.test(ch)) {
+      tokens.push({ text: ch, type: 'operator' });
+      i++;
+      continue;
     }
-    .glow-emerald {
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25), 0 0 50px rgba(16, 185, 129, 0.08);
+
+    // Everything else
+    tokens.push({ text: ch, type: 'plain' });
+    i++;
+  }
+
+  return tokens;
+}
+
+const TOKEN_COLORS: Record<Token['type'], string> = {
+  keyword: 'text-cyan-400',
+  string: 'text-emerald-400',
+  number: 'text-amber-400',
+  comment: 'text-neutral-600 italic',
+  function: 'text-sky-400',
+  operator: 'text-neutral-500',
+  plain: 'text-neutral-300',
+};
+
+export default function CodeHighlighter({ code, className = '' }: CodeHighlighterProps) {
+  const lines = useMemo(() => code.split('\n'), [code]);
+
+  return (
+    <pre className={`font-mono text-sm leading-[1.6] ${className}`}>
+      <code>
+        {lines.map((line, idx) => {
+          const tokens = tokenizeLine(line);
+          return (
+            <div key={idx} className="flex group hover:bg-neutral-800/20 transition-colors duration-100">
+              <span className="select-none w-10 shrink-0 text-right pr-3 text-neutral-700 text-xs border-r border-neutral-800/60">
+                {idx + 1}
+              </span>
+              <span className="pl-3 flex-1 whitespace-pre-wrap">
+                {tokens.length === 0 ? (
+                  '\u00a0'
+                ) : (
+                  tokens.map((token, ti) => (
+                    <span key={ti} className={TOKEN_COLORS[token.type]}>
+                      {token.text}
+                    </span>
+                  ))
+                )}
+              </span>
+            </div>
+          );
+        })}
+      </code>
+    </pre>
+  );
+}
+
+
+==================== FILE: src/components/ControlSidebar.tsx ====================
+import {
+  SlidersHorizontal,
+  RotateCw,
+  Wind,
+  Zap,
+  AlertTriangle,
+  Gauge,
+  Target,
+  Sparkles,
+  Radio,
+} from 'lucide-react';
+import type { FieldMode } from './VectorCanvas';
+
+interface ControlSidebarProps {
+  alpha: number;
+  setAlpha: (v: number) => void;
+  curlIntensity: number;
+  setCurlIntensity: (v: number) => void;
+  mode: FieldMode;
+  setMode: (m: FieldMode) => void;
+  onPreset: (preset: {
+    mode: FieldMode;
+    curl: number;
+    alpha: number;
+    label: string;
+  }) => void;
+  divergence: number;
+  curlMagnitude: number;
+}
+
+const presets = [
+  {
+    label: 'Pure Rotation (Curl Max)',
+    mode: 'rotational' as FieldMode,
+    curl: 2.0,
+    alpha: 1.0,
+    icon: RotateCw,
+    accent: 'emerald' as const,
+  },
+  {
+    label: 'Pure Divergence (Sink/Source)',
+    mode: 'divergent' as FieldMode,
+    curl: 0,
+    alpha: 2.0,
+    icon: Wind,
+    accent: 'cyan' as const,
+  },
+  {
+    label: 'Chaos Storm',
+    mode: 'rotational' as FieldMode,
+    curl: -1.8,
+    alpha: 2.5,
+    icon: Zap,
+    accent: 'red' as const,
+  },
+];
+
+const presetStyles = {
+  emerald: 'border-emerald-600/30 hover:border-emerald-500/60 hover:bg-emerald-950/20 text-emerald-400',
+  cyan: 'border-cyan-600/30 hover:border-cyan-500/60 hover:bg-cyan-950/20 text-cyan-400',
+  red: 'border-red-600/30 hover:border-red-500/60 hover:bg-red-950/20 text-red-400',
+};
+
+export default function ControlSidebar({
+  alpha,
+  setAlpha,
+  curlIntensity,
+  setCurlIntensity,
+  mode,
+  setMode,
+  onPreset,
+  divergence,
+  curlMagnitude,
+}: ControlSidebarProps) {
+  const isCritical = Math.abs(curlIntensity) > 1.4;
+
+  return (
+    <div className="space-y-6">
+      {/* === FIELD CONTROLS — primary panel === */}
+      <div className="panel p-5">
+        <div className="flex items-center gap-2 mb-1">
+          <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
+          <h3 className="section-header">Field Controls</h3>
+        </div>
+        <div className="h-px bg-neutral-800 mb-5" />
+
+        {/* Alpha slider */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <label className="section-label flex items-center gap-1.5">
+              <Gauge className="w-3.5 h-3.5 text-emerald-400" />
+              Velocity Alpha (&alpha;)
+            </label>
+            <span className="text-lg font-mono font-bold text-emerald-400 tabular-nums">
+              {alpha.toFixed(2)}
+            </span>
+          </div>
+          <input
+            type="range"
+            min={0.2}
+            max={2.5}
+            step={0.05}
+            value={alpha}
+            onChange={(e) => setAlpha(parseFloat(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-xs text-neutral-700 font-mono mt-1">
+            <span>0.20</span>
+            <span>2.50</span>
+          </div>
+        </div>
+
+        {/* Curl slider */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <label className="section-label flex items-center gap-1.5">
+              <RotateCw className="w-3.5 h-3.5 text-cyan-400" />
+              Curl Intensity Matrix
+            </label>
+            <span
+              className={`text-lg font-mono font-bold tabular-nums ${
+                isCritical ? 'text-red-400' : 'text-cyan-400'
+              }`}
+            >
+              {curlIntensity.toFixed(2)}
+            </span>
+          </div>
+          <input
+            type="range"
+            min={-2.0}
+            max={2.0}
+            step={0.05}
+            value={curlIntensity}
+            onChange={(e) => setCurlIntensity(parseFloat(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-xs text-neutral-700 font-mono mt-1">
+            <span>-2.00</span>
+            <span>+2.00</span>
+          </div>
+        </div>
+
+        {/* Mode selectors */}
+        <div>
+          <label className="section-label mb-2 block">Vector Topology Mode</label>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setMode('rotational')}
+              className={`flex flex-col items-center gap-1.5 py-3 rounded border text-sm font-medium transition-colors duration-200 ${
+                mode === 'rotational'
+                  ? 'border-emerald-500/60 bg-emerald-950/20 text-emerald-400'
+                  : 'border-neutral-700 bg-neutral-800/50 text-neutral-300 hover:border-neutral-600 hover:bg-neutral-800'
+              }`}
+            >
+              <RotateCw className="w-5 h-5" />
+              <span>Rotational</span>
+              <span className="text-xs font-mono opacity-50">F = [-y, x]</span>
+            </button>
+            <button
+              onClick={() => setMode('divergent')}
+              className={`flex flex-col items-center gap-1.5 py-3 rounded border text-sm font-medium transition-colors duration-200 ${
+                mode === 'divergent'
+                  ? 'border-cyan-500/60 bg-cyan-950/20 text-cyan-400'
+                  : 'border-neutral-700 bg-neutral-800/50 text-neutral-300 hover:border-neutral-600 hover:bg-neutral-800'
+              }`}
+            >
+              <Wind className="w-5 h-5" />
+              <span>Divergent</span>
+              <span className="text-xs font-mono opacity-50">F = [x, y]</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* === PRESENTATION PRESETS === */}
+      <div className="panel-inner p-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Sparkles className="w-4 h-4 text-cyan-400" />
+          <h3 className="section-header">Presentation Presets</h3>
+        </div>
+        <div className="h-px bg-neutral-800/60 mb-4" />
+        <div className="space-y-2">
+          {presets.map((preset) => {
+            const Icon = preset.icon;
+            return (
+              <button
+                key={preset.label}
+                onClick={() =>
+                  onPreset({
+                    mode: preset.mode,
+                    curl: preset.curl,
+                    alpha: preset.alpha,
+                    label: preset.label,
+                  })
+                }
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded border bg-neutral-800/30 text-left transition-colors duration-200 ${presetStyles[preset.accent]}`}
+              >
+                <Icon className="w-4 h-4 shrink-0" />
+                <div className="min-w-0">
+                  <div className="text-sm font-medium truncate">{preset.label}</div>
+                  <div className="text-xs font-mono opacity-50">
+                    curl={preset.curl} &alpha;={preset.alpha}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* === LIVE METRICS === */}
+      <div className="panel-inner p-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Radio className="w-4 h-4 text-emerald-400 animate-pulse-dot" />
+          <h3 className="section-header">Live Metrics</h3>
+        </div>
+        <div className="h-px bg-neutral-800/60 mb-4" />
+        <div className="space-y-3">
+          <div className="panel-flat p-3">
+            <div className="section-label mb-1">DIVERGENCE (&nabla;&middot;F)</div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-mono font-bold text-cyan-400 tabular-nums">
+                {divergence.toFixed(2)}
+              </span>
+              <span className="text-xs text-neutral-600">
+                {mode === 'divergent' ? 'active' : 'idle'}
+              </span>
+            </div>
+          </div>
+          <div className="panel-flat p-3">
+            <div className="section-label mb-1">CURL MAGNITUDE |&nabla;&times;F|</div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-mono font-bold text-emerald-400 tabular-nums">
+                {curlMagnitude.toFixed(2)}
+              </span>
+              <span className="text-xs text-neutral-600">
+                {mode === 'rotational' ? 'active' : 'idle'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* === SYSTEM STATUS — left accent bar === */}
+      <div
+        className={`panel p-4 transition-colors duration-300 ${
+          isCritical ? 'bar-red border-red-600/40 bg-red-950/10' : 'bar-emerald border-emerald-600/30'
+        }`}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className={`w-2.5 h-2.5 rounded-full ${
+              isCritical ? 'bg-red-500 animate-blink' : 'bg-emerald-400 animate-pulse-dot'
+            }`}
+          />
+          <div>
+            <div className="section-label mb-0.5">SYSTEM STATUS</div>
+            <div
+              className={`text-sm font-bold tracking-wide font-mono ${
+                isCritical ? 'text-red-400 animate-blink' : 'text-emerald-400'
+              }`}
+            >
+              {isCritical ? 'CRITICAL VELOCITY BREAKOUT' : 'GRID STABLE'}
+            </div>
+          </div>
+          <AlertTriangle
+            className={`w-4 h-4 ml-auto ${
+              isCritical ? 'text-red-500' : 'text-emerald-600/40'
+            }`}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+==================== FILE: src/components/Header.tsx ====================
+import { FunctionSquare, Atom, TerminalSquare } from 'lucide-react';
+
+export type TabId = 'manual' | 'simulation' | 'console';
+
+interface HeaderProps {
+  activeTab: TabId;
+  onTabChange: (tab: TabId) => void;
+}
+
+export default function Header({ activeTab, onTabChange }: HeaderProps) {
+  const tabs: { id: TabId; label: string; shortLabel: string; icon: typeof FunctionSquare }[] = [
+    { id: 'manual', label: 'Interactive Manual', shortLabel: 'Manual', icon: FunctionSquare },
+    { id: 'simulation', label: 'Simulation Arena', shortLabel: 'Arena', icon: Atom },
+    { id: 'console', label: 'Live Console', shortLabel: 'Console', icon: TerminalSquare },
+  ];
+
+  return (
+    <header className="sticky top-0 z-50 bg-neutral-950/90 backdrop-blur-md border-b border-neutral-800/80">
+      <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between gap-6">
+        {/* Logo */}
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="relative w-10 h-10 rounded-lg border border-emerald-600/40 bg-emerald-950/20 flex items-center justify-center">
+            <FunctionSquare className="w-5 h-5 text-emerald-400" />
+          </div>
+          <div className="hidden sm:block">
+            <div className="text-sm font-semibold text-neutral-100 tracking-tight">
+              Vector Calculus Lab
+            </div>
+            <div className="text-xs text-neutral-600 font-mono">
+              GNU Octave / MATLAB Module
+            </div>
+          </div>
+        </div>
+
+        {/* Tab Switcher */}
+        <nav className="flex items-center gap-0.5 p-1 rounded-lg border border-neutral-800/70 bg-neutral-900/50">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => onTabChange(tab.id)}
+                className={`relative flex items-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? 'bg-neutral-800 text-emerald-400'
+                    : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/40'
+                }`}
+              >
+                <Icon
+                  className={`w-4 h-4 transition-colors duration-200 ${
+                    isActive ? 'text-emerald-400' : 'text-neutral-600'
+                  }`}
+                />
+                <span className="hidden md:inline">{tab.label}</span>
+                <span className="md:hidden">{tab.shortLabel}</span>
+                {isActive && (
+                  <div className="absolute -bottom-px left-1/2 -translate-x-1/2 w-6 h-px bg-emerald-400" />
+                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Status indicator */}
+        <div className="hidden lg:flex items-center gap-2 shrink-0">
+          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-dot" />
+          <span className="text-xs text-neutral-500 font-mono">LIVE SESSION</span>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+
+==================== FILE: src/components/LiveCodingTerminal.tsx ====================
+import { useState, useRef, useEffect, useCallback } from 'react';
+import {
+  Play,
+  Square,
+  TerminalSquare,
+  Code2,
+  ChevronRight,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  Sparkles,
+  Trash2,
+  CornerDownLeft,
+} from 'lucide-react';
+import CodeHighlighter from './CodeHighlighter';
+import ArchitectureFlow, { type FlowStep } from './ArchitectureFlow';
+import { generateCode, type GeneratedCode } from '@/utils/codeGenerator';
+import { executeCode, type SandboxResult } from '@/utils/codeSandbox';
+
+interface LogEntry {
+  type: 'output' | 'error' | 'info' | 'success';
+  text: string;
+  timestamp: number;
+}
+
+export default function LiveCodingTerminal() {
+  const [query, setQuery] = useState('');
+  const [generatedCode, setGeneratedCode] = useState<GeneratedCode | null>(null);
+  const [streamingCode, setStreamingCode] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [flowStep, setFlowStep] = useState<FlowStep>('idle');
+  const [execTime, setExecTime] = useState<number | null>(null);
+  const [runCount, setRunCount] = useState(0);
+
+  const outputRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const streamTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Auto-scroll output
+  useEffect(() => {
+    if (outputRef.current) {
+      outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
-    .glow-violet {
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.25), 0 0 50px rgba(168, 85, 247, 0.08);
+  }, [logs]);
+
+  // Focus input on mount
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const stopStreaming = useCallback(() => {
+    if (streamTimerRef.current) {
+      clearInterval(streamTimerRef.current);
+      streamTimerRef.current = null;
     }
-    .glow-amber {
-      box-shadow: 0 0 25px rgba(245, 158, 11, 0.25), 0 0 50px rgba(245, 158, 11, 0.08);
+    setIsStreaming(false);
+  }, []);
+
+  const runCode = useCallback(
+    async (code: string) => {
+      setIsExecuting(true);
+      setFlowStep('executing');
+      setLogs((prev) => [
+        ...prev,
+        { type: 'info', text: '> Initializing sandboxed Web Worker...', timestamp: Date.now() },
+      ]);
+
+      try {
+        const result: SandboxResult = await executeCode(code);
+        setExecTime(result.executionTime);
+
+        if (result.success) {
+          setFlowStep('output');
+          setLogs((prev) => [
+            ...prev,
+            ...result.output.map((line) => ({
+              type: 'output' as const,
+              text: line,
+              timestamp: Date.now(),
+            })),
+            {
+              type: 'success' as const,
+              text: `Process exited with code 0 | ${result.output.length} log(s) | ${result.executionTime}ms`,
+              timestamp: Date.now(),
+            },
+          ]);
+        } else {
+          setFlowStep('error');
+          setLogs((prev) => [
+            ...prev,
+            { type: 'error', text: result.error || 'Unknown runtime error', timestamp: Date.now() },
+            {
+              type: 'error' as const,
+              text: `Process exited with code 1 | ${result.executionTime}ms`,
+              timestamp: Date.now(),
+            },
+          ]);
+        }
+      } catch (err) {
+        setFlowStep('error');
+        setLogs((prev) => [
+          ...prev,
+          {
+            type: 'error',
+            text: `Sandbox Error: ${err instanceof Error ? err.message : String(err)}`,
+            timestamp: Date.now(),
+          },
+        ]);
+      } finally {
+        setIsExecuting(false);
+        setRunCount((c) => c + 1);
+      }
+    },
+    [],
+  );
+
+  const handleRun = useCallback(async () => {
+    const trimmed = query.trim();
+    if (!trimmed || isStreaming || isExecuting) return;
+
+    // Clear previous
+    setLogs([]);
+    setExecTime(null);
+    setFlowStep('input');
+    setGeneratedCode(null);
+    setStreamingCode('');
+
+    setLogs((prev) => [
+      ...prev,
+      { type: 'info', text: `>> ${trimmed}`, timestamp: Date.now() },
+    ]);
+
+    // Generate code
+    const gen = generateCode(trimmed);
+    setGeneratedCode(gen);
+
+    // Streaming effect
+    setIsStreaming(true);
+    const chars = gen.code.split('');
+    let idx = 0;
+    let current = '';
+
+    setFlowStep('input');
+
+    streamTimerRef.current = setInterval(() => {
+      if (idx < chars.length) {
+        // Stream a few chars per tick for speed
+        const chunkSize = Math.max(1, Math.floor(chars.length / 80));
+        const end = Math.min(idx + chunkSize, chars.length);
+        current = chars.slice(0, end).join('');
+        setStreamingCode(current);
+        idx = end;
+      } else {
+        stopStreaming();
+        setStreamingCode(gen.code);
+        // Auto-run after streaming completes
+        runCode(gen.code);
+      }
+    }, 16);
+  }, [query, isStreaming, isExecuting, stopStreaming, runCode]);
+
+  const handleStop = useCallback(() => {
+    stopStreaming();
+    setIsExecuting(false);
+    setFlowStep('idle');
+    setLogs((prev) => [
+      ...prev,
+      { type: 'error', text: '> Execution interrupted by user', timestamp: Date.now() },
+    ]);
+  }, [stopStreaming]);
+
+  const handleClear = useCallback(() => {
+    setLogs([]);
+    setGeneratedCode(null);
+    setStreamingCode('');
+    setFlowStep('idle');
+    setExecTime(null);
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleRun();
+      }
+    },
+    [handleRun],
+  );
+
+  const exampleQueries = [
+    'gradient of f(x,y) = x^2 + y^2',
+    'divergence of F = [x, y]',
+    'curl of F = [-y, x]',
+    'meshgrid vector field',
+    'fibonacci sequence',
+    'integral of x^2 from 0 to 2',
+    'matrix eigenvalues',
+    'prime sieve up to 100',
+  ];
+
+  const busy = isStreaming || isExecuting;
+
+  return (
+    <div className="max-w-[1400px] mx-auto px-6 py-8 animate-fade-in">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+        {/* Left: Terminal + Code + Output */}
+        <div className="space-y-5 min-w-0">
+          {/* Title block */}
+          <div className="panel p-5 grid-both">
+            <div className="flex items-center gap-2 mb-2">
+              <TerminalSquare className="w-4 h-4 text-emerald-400" />
+              <span className="section-label">LIVE EXECUTION ENVIRONMENT</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-neutral-100 tracking-tight mb-1" style={{ fontFamily: 'Newsreader, Georgia, serif' }}>
+              Interactive Code Console
+            </h1>
+            <p className="text-sm text-neutral-500 max-w-2xl">
+              Type a mathematical query at the prompt. The system generates executable code,
+              streams it into the editor, and runs it in a sandboxed Web Worker.
+            </p>
+          </div>
+
+          {/* Input prompt */}
+          <div className="panel p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <ChevronRight className="w-4 h-4 text-emerald-400" />
+              <span className="section-label">Command Input</span>
+            </div>
+            <div className="flex items-stretch gap-2">
+              <div className="flex items-center gap-2 px-3 border border-neutral-800 rounded-l bg-neutral-950">
+                <span className="text-emerald-400 font-mono text-sm font-bold">&gt;&gt;</span>
+              </div>
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                disabled={busy}
+                placeholder="e.g. gradient of f(x,y) = x^2 + y^2"
+                className="flex-1 bg-neutral-950 border border-neutral-800 border-l-0 rounded-r px-3 py-2.5 text-sm font-mono text-neutral-200 placeholder:text-neutral-700 focus:outline-none focus:border-emerald-600/50 transition-colors duration-150"
+              />
+              {busy ? (
+                <button
+                  onClick={handleStop}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded border border-red-600/40 bg-red-950/30 text-red-400 text-sm font-medium hover:bg-red-950/50 transition-colors duration-150"
+                >
+                  <Square className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Stop</span>
+                </button>
+              ) : (
+                <button
+                  onClick={handleRun}
+                  disabled={!query.trim()}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded border border-emerald-600/40 bg-emerald-950/30 text-emerald-400 text-sm font-medium hover:bg-emerald-950/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150"
+                >
+                  <Play className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Run</span>
+                </button>
+              )}
+            </div>
+
+            {/* Example queries */}
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {exampleQueries.slice(0, 5).map((ex) => (
+                <button
+                  key={ex}
+                  onClick={() => !busy && setQuery(ex)}
+                  disabled={busy}
+                  className="data-tag hover:border-neutral-700 hover:text-neutral-300 transition-colors duration-150 disabled:opacity-40"
+                >
+                  {ex}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Generated code editor */}
+          <div className="panel overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2.5 border-b border-neutral-800 bg-neutral-900/40">
+              <div className="flex items-center gap-2">
+                <Code2 className="w-4 h-4 text-cyan-400" />
+                <span className="section-label">Generated Code</span>
+                {generatedCode && (
+                  <span className="text-xs text-neutral-600 font-mono ml-2">
+                    {generatedCode.description}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {isStreaming && (
+                  <div className="flex items-center gap-1.5 text-xs text-neutral-500 font-mono">
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    <span>streaming</span>
+                  </div>
+                )}
+                {!isStreaming && generatedCode && (
+                  <span className="text-xs font-mono text-neutral-600">
+                    {(streamingCode || generatedCode.code).split('\n').length} lines
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="bg-neutral-950 max-h-[320px] overflow-auto">
+              {generatedCode ? (
+                <CodeHighlighter
+                  code={streamingCode || generatedCode.code}
+                  className="py-3"
+                />
+              ) : (
+                <div className="py-12 px-6 text-center">
+                  <Code2 className="w-8 h-8 text-neutral-800 mx-auto mb-2" />
+                  <p className="text-sm text-neutral-600">
+                    Generated code will appear here after you run a query
+                  </p>
+                </div>
+              )}
+              {isStreaming && (
+                <div className="inline-block w-1.5 h-4 bg-cyan-400 animate-cursor-blink ml-1 align-middle" />
+              )}
+            </div>
+          </div>
+
+          {/* Terminal output */}
+          <div className="panel overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2.5 border-b border-neutral-800 bg-neutral-900/40">
+              <div className="flex items-center gap-2">
+                <TerminalSquare className="w-4 h-4 text-emerald-400" />
+                <span className="section-label">Terminal Output</span>
+              </div>
+              <div className="flex items-center gap-3">
+                {runCount > 0 && (
+                  <span className="text-xs font-mono text-neutral-600">
+                    runs: {runCount}
+                  </span>
+                )}
+                {logs.length > 0 && (
+                  <button
+                    onClick={handleClear}
+                    className="flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-400 transition-colors duration-150"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    <span>clear</span>
+                  </button>
+                )}
+              </div>
+            </div>
+            <div
+              ref={outputRef}
+              className="bg-[#020617] max-h-[280px] overflow-auto p-4 font-mono text-sm leading-[1.7]"
+            >
+              {logs.length === 0 ? (
+                <div className="text-neutral-700 text-xs">
+                  <span className="text-neutral-600">$</span> Waiting for input...
+                  <span className="inline-block w-1.5 h-3.5 bg-emerald-500 animate-cursor-blink ml-1 align-middle" />
+                </div>
+              ) : (
+                logs.map((entry, idx) => {
+                  const time = new Date(entry.timestamp).toLocaleTimeString('en-US', {
+                    hour12: false,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                  });
+                  if (entry.type === 'error') {
+                    return (
+                      <div key={idx} className="flex gap-2 animate-slide-up">
+                        <span className="text-neutral-800 select-none shrink-0">{time}</span>
+                        <XCircle className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
+                        <span className="text-red-400">{entry.text}</span>
+                      </div>
+                    );
+                  }
+                  if (entry.type === 'success') {
+                    return (
+                      <div key={idx} className="flex gap-2 animate-slide-up">
+                        <span className="text-neutral-800 select-none shrink-0">{time}</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                        <span className="text-emerald-500/70 text-xs">{entry.text}</span>
+                      </div>
+                    );
+                  }
+                  if (entry.type === 'info') {
+                    return (
+                      <div key={idx} className="flex gap-2 animate-slide-up">
+                        <span className="text-neutral-800 select-none shrink-0">{time}</span>
+                        <span className="text-neutral-500">{entry.text}</span>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={idx} className="flex gap-2 animate-slide-up">
+                      <span className="text-neutral-800 select-none shrink-0">{time}</span>
+                      <span className="text-neutral-600 shrink-0">&gt;</span>
+                      <span className="text-[#22C55E]">{entry.text}</span>
+                    </div>
+                  );
+                })
+              )}
+              {isExecuting && (
+                <div className="flex gap-2 mt-1">
+                  <span className="text-neutral-800 select-none shrink-0">--:--:--</span>
+                  <Loader2 className="w-3.5 h-3.5 text-emerald-500 animate-spin shrink-0 mt-0.5" />
+                  <span className="text-neutral-600 text-xs">executing in worker...</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Architecture Flow + Quick Reference */}
+        <div className="space-y-5">
+          <ArchitectureFlow step={flowStep} executionTime={execTime} />
+
+          {/* Quick reference */}
+          <div className="panel p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+              <h3 className="section-header">Supported Queries</h3>
+            </div>
+            <div className="space-y-2">
+              {[
+                { label: 'gradient', detail: '∇f = [∂f/∂x, ∂f/∂y]' },
+                { label: 'divergence', detail: '∇·F scalar flux' },
+                { label: 'curl', detail: '∇×F rotation' },
+                { label: 'meshgrid', detail: 'grid + quiver plot' },
+                { label: 'matrix', detail: 'det, trace, eigenvalues' },
+                { label: 'integral', detail: "Simpson's rule" },
+                { label: 'fibonacci', detail: 'sequence + φ ratio' },
+                { label: 'prime', detail: 'Sieve of Eratosthenes' },
+              ].map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => !busy && setQuery(item.label)}
+                  disabled={busy}
+                  className="w-full flex items-center justify-between px-3 py-2 rounded border border-neutral-800/60 bg-neutral-900/30 hover:border-neutral-700 hover:bg-neutral-900/50 disabled:opacity-40 transition-colors duration-150 text-left"
+                >
+                  <span className="text-xs font-mono text-neutral-300">{item.label}</span>
+                  <span className="text-xs font-mono text-neutral-600">{item.detail}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Status bar */}
+          <div className="panel p-4 bar-emerald">
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-2.5 h-2.5 rounded-full ${
+                  busy ? 'bg-amber-400 animate-pulse-dot' : 'bg-emerald-400'
+                }`}
+              />
+              <div className="flex-1">
+                <div className="section-label">SANDBOX STATUS</div>
+                <div
+                  className={`text-sm font-mono font-medium ${
+                    busy ? 'text-amber-400' : 'text-emerald-400'
+                  }`}
+                >
+                  {busy ? 'EXECUTING' : 'READY'}
+                </div>
+              </div>
+              <CornerDownLeft className="w-4 h-4 text-neutral-600" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+==================== FILE: src/components/ManualView.tsx ====================
+import { FunctionSquare, Wind, RotateCw, Code2, Terminal, Copy, Check } from 'lucide-react';
+import { useState } from 'react';
+
+const theoryBlocks = [
+  {
+    icon: FunctionSquare,
+    title: 'Gradient Field Map',
+    formula: '\u2207f = [\u2202f/\u2202x, \u2202f/\u2202y, \u2202f/\u2202z]',
+    accent: 'emerald' as const,
+    description:
+      'The gradient of a scalar field f produces a vector field pointing in the direction of steepest ascent. Each component is the partial derivative of f along that axis. In Octave, this is computed numerically via finite differences across a meshgrid.',
+  },
+  {
+    icon: Wind,
+    title: 'Divergence Solver',
+    formula: '\u2207\u00b7F = \u2202F\u2081/\u2202x + \u2202F\u2082/\u2202y + \u2202F\u2083/\u2202z',
+    accent: 'cyan' as const,
+    description:
+      'Divergence measures the net outward flux of a vector field at a point. A positive divergence indicates a source (flow radiates outward), while a negative divergence indicates a sink (flow converges inward). For F = [x, y], divergence is 2 everywhere.',
+  },
+  {
+    icon: RotateCw,
+    title: 'Curl Rotational Axis',
+    formula: '\u2207\u00d7F = | i  j  k; \u2202/\u2202x \u2202/\u2202y \u2202/\u2202z; F\u2081 F\u2082 F\u2083 |',
+    accent: 'emerald' as const,
+    description:
+      'Curl measures the rotational tendency of a vector field. For a 2D field F = [-y, x], the curl is constant at +2 (counter-clockwise rotation). A curl of zero means the field is irrotational. The right-hand rule determines the rotation direction.',
+  },
+];
+
+const octaveCode: { line: string; comment: string; section?: boolean }[] = [
+  { line: 'pkg load symbolic', comment: 'Load the symbolic math toolbox for analytical derivatives.' },
+  { line: '', comment: '' },
+  { line: 'x = linspace(-5, 5, 30);', comment: 'Create a 1D coordinate vector from -5 to 5 with 30 sample points.' },
+  { line: 'y = linspace(-5, 5, 30);', comment: 'Create a matching 1D axis for the y direction.' },
+  { line: '[X, Y] = meshgrid(x, y);', comment: 'Generate a 2D grid coordinate matrix. X and Y now hold every (x, y) pair as 30x30 matrices.' },
+  { line: '', comment: '' },
+  { line: '% --- Rotational Field: F = [-y, x] ---', comment: 'Comment header: we define a curl/rotational field where vectors rotate counter-clockwise.', section: true },
+  { line: 'U = -Y;', comment: 'X-component of velocity: negative y drives leftward flow above the origin.' },
+  { line: 'V = X;', comment: 'Y-component of velocity: positive x drives upward flow to the right of the origin.' },
+  { line: '', comment: '' },
+  { line: '% --- Divergent Field: F = [x, y] ---', comment: 'Comment header: a source field where vectors radiate outward from the origin.', section: true },
+  { line: 'U2 = X;', comment: 'X-component: flow moves rightward proportional to x position.' },
+  { line: 'V2 = Y;', comment: 'Y-component: flow moves upward proportional to y position.' },
+  { line: '', comment: '' },
+  { line: 'figure;', comment: 'Open a new figure window for plotting.' },
+  { line: 'subplot(1, 2, 1);', comment: 'Split the figure into a 1x2 grid and select the left panel.' },
+  { line: 'quiver(X, Y, U, V);', comment: 'Draw a 2D quiver (arrow) plot: each grid point gets an arrow proportional to (U, V). This visualizes the rotational field.' },
+  { line: 'title("Rotational Field F = [-y, x]");', comment: 'Label the rotational plot.' },
+  { line: 'subplot(1, 2, 2);', comment: 'Select the right panel of the 1x2 grid.' },
+  { line: 'quiver(X, Y, U2, V2);', comment: 'Draw the divergent/source field as a quiver plot with arrows radiating outward.' },
+  { line: 'title("Divergent Field F = [x, y]");', comment: 'Label the divergent plot.' },
+];
+
+const accentMap = {
+  emerald: {
+    iconBg: 'border-emerald-600/40 bg-emerald-950/20 text-emerald-400',
+    formulaText: 'text-emerald-400',
+    border: 'accent-emerald',
+  },
+  cyan: {
+    iconBg: 'border-cyan-600/40 bg-cyan-950/20 text-cyan-400',
+    formulaText: 'text-cyan-400',
+    border: 'accent-cyan',
+  },
+};
+
+export default function ManualView() {
+  const [copiedLine, setCopiedLine] = useState<number | null>(null);
+
+  const copyLine = (text: string, idx: number) => {
+    navigator.clipboard?.writeText(text);
+    setCopiedLine(idx);
+    setTimeout(() => setCopiedLine(null), 1500);
+  };
+
+  return (
+    <div className="max-w-[1400px] mx-auto px-6 py-8 space-y-8 animate-fade-in">
+      {/* Title block */}
+      <div className="panel p-6 sm:p-8 grid-coarse">
+        <div className="flex items-center gap-2 mb-3">
+          <Terminal className="w-4 h-4 text-emerald-400" />
+          <span className="section-label">LAB MANUAL / REFERENCE MODULE</span>
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-semibold text-neutral-100 tracking-tight mb-2" style={{ fontFamily: 'Newsreader, Georgia, serif' }}>
+          Vector Field Theory &amp; Visualization
+        </h1>
+        <p className="text-sm text-neutral-500 max-w-3xl leading-relaxed">
+          A structured breakdown of the three fundamental differential operators in vector
+          calculus &mdash; gradient, divergence, and curl &mdash; alongside GNU Octave
+          scripts for visualizing vector fields using meshgrid and quiver plots.
+        </p>
+      </div>
+
+      {/* Theory blocks */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {theoryBlocks.map((block) => {
+          const Icon = block.icon;
+          const a = accentMap[block.accent];
+          return (
+            <div
+              key={block.title}
+              className={`panel p-6 ${a.border} transition-colors duration-200 hover:border-neutral-700`}
+            >
+              <div className={`w-12 h-12 rounded-md border flex items-center justify-center mb-4 ${a.iconBg}`}>
+                <Icon className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-semibold text-neutral-100 mb-3" style={{ fontFamily: 'Newsreader, Georgia, serif' }}>{block.title}</h3>
+              <div className={`font-mono text-sm mb-4 px-3 py-2 rounded border border-neutral-800 bg-neutral-950/60 ${a.formulaText}`}>
+                {block.formula}
+              </div>
+              <p className="text-sm text-neutral-400 leading-relaxed">{block.description}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Octave code with explanations */}
+      <div className="panel p-6 sm:p-8">
+        <div className="flex items-center gap-2 mb-1">
+          <Code2 className="w-5 h-5 text-cyan-400" />
+          <h2 className="section-header">GNU Octave Script &mdash; Student Manual</h2>
+        </div>
+        <p className="text-sm text-neutral-500 mb-6">
+          Line-by-line breakdown of the Octave commands used to generate quiver plots for
+          rotational and divergent vector fields.
+        </p>
+
+        {/* Code container */}
+        <div className="rounded-md border border-neutral-800 bg-neutral-950 overflow-hidden">
+          {/* Terminal bar */}
+          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-neutral-800 bg-neutral-900/40">
+            <div className="flex gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full border border-neutral-700" />
+              <div className="w-2.5 h-2.5 rounded-full border border-neutral-700" />
+              <div className="w-2.5 h-2.5 rounded-full border border-neutral-700" />
+            </div>
+            <span className="text-xs text-neutral-600 font-mono ml-2">octave &mdash; vector_field_demo.m</span>
+          </div>
+
+          {/* Code lines with explanations */}
+          <div>
+            {octaveCode.map((entry, idx) => {
+              const isEmpty = entry.line.trim() === '';
+              const isComment = entry.line.trim().startsWith('%');
+              const showDivider = entry.section;
+
+              return (
+                <div key={idx}>
+                  {showDivider && <div className="h-px bg-neutral-800" />}
+                  <div
+                    className={`flex group transition-colors duration-100 ${
+                      isEmpty ? '' : 'hover:bg-neutral-900/40'
+                    } ${showDivider ? 'border-t border-neutral-800' : ''} ${
+                      idx > 0 && !showDivider && !isEmpty ? 'border-t border-neutral-800/40' : ''
+                    }`}
+                  >
+                    {/* Line number + code */}
+                    <div className="flex shrink-0 w-[44%] min-w-[260px] items-start lg:w-[42%]">
+                      <span className="text-neutral-700 font-mono text-xs select-none w-10 text-right pr-3 pt-3">
+                        {idx + 1}
+                      </span>
+                      <code
+                        className={`flex-1 font-mono text-sm py-3 pr-3 whitespace-pre ${
+                          isComment
+                            ? 'text-neutral-600 italic'
+                            : isEmpty
+                              ? 'text-neutral-800'
+                              : 'text-emerald-400'
+                        }`}
+                      >
+                        {entry.line || '\u00a0'}
+                      </code>
+                      {!isEmpty && (
+                        <button
+                          onClick={() => copyLine(entry.line, idx)}
+                          className="flex items-center gap-1 px-3 pt-3 text-neutral-700 hover:text-emerald-400 opacity-40 group-hover:opacity-100 transition-all duration-150"
+                          title="Copy line"
+                        >
+                          {copiedLine === idx ? (
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          ) : (
+                            <Copy className="w-3.5 h-3.5" />
+                          )}
+                        </button>
+                      )}
+                    </div>
+                    {/* Explanation */}
+                    <div className="flex-1 border-l border-neutral-800 px-4 py-3 min-w-0">
+                      {entry.comment ? (
+                        <p className="text-xs text-neutral-500 leading-relaxed">
+                          {entry.comment}
+                        </p>
+                      ) : (
+                        <p className="text-xs text-neutral-800">&mdash;</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Key takeaways */}
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="panel-inner p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="text-xs font-mono text-emerald-400 font-semibold">meshgrid</span>
+            </div>
+            <p className="text-xs text-neutral-500 leading-relaxed">
+              Converts two 1D coordinate vectors into full 2D coordinate matrices, so every
+              grid cell knows its (x, y) position. Essential for evaluating vector fields
+              across a spatial domain.
+            </p>
+          </div>
+          <div className="panel-inner p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 rounded-full bg-cyan-400" />
+              <span className="text-xs font-mono text-cyan-400 font-semibold">quiver</span>
+            </div>
+            <p className="text-xs text-neutral-500 leading-relaxed">
+              Renders a 2D field of arrows where each arrow&apos;s direction and magnitude
+              represent the vector (U, V) at that grid point. The core visualization tool
+              for vector fields in Octave/MATLAB.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+==================== FILE: src/components/MathBackground.tsx ====================
+export default function MathBackground() {
+  return (
+    <div
+      className="fixed inset-0 pointer-events-none overflow-hidden"
+      aria-hidden="true"
+      style={{ zIndex: 0 }}
+    >
+      {/* Deep base */}
+      <div className="absolute inset-0 bg-[#070710]" />
+
+      {/* Layer 1: Animated fine grid with drift */}
+      <div
+        className="absolute inset-0 animate-drift"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px)
+          `,
+          backgroundSize: '28px 28px',
+        }}
+      />
+
+      {/* Layer 2: Coarse grid — static, slightly brighter */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(6, 182, 212, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(6, 182, 212, 0.06) 1px, transparent 1px)
+          `,
+          backgroundSize: '112px 112px',
+        }}
+      />
+
+      {/* Layer 3: Major SVG canvas with animated mathematical elements */}
+      <svg
+        className="absolute inset-0"
+        width="100%"
+        height="100%"
+        preserveAspectRatio="xMidYMid slice"
+        style={{ opacity: 1 }}
+      >
+        <defs>
+          {/* Gradient for flowing streamlines */}
+          <linearGradient id="streamEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="rgba(16, 185, 129, 0)" />
+            <stop offset="40%" stopColor="rgba(16, 185, 129, 0.25)" />
+            <stop offset="60%" stopColor="rgba(16, 185, 129, 0.25)" />
+            <stop offset="100%" stopColor="rgba(16, 185, 129, 0)" />
+          </linearGradient>
+
+          <linearGradient id="streamCyan" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="rgba(6, 182, 212, 0)" />
+            <stop offset="40%" stopColor="rgba(6, 182, 212, 0.2)" />
+            <stop offset="60%" stopColor="rgba(6, 182, 212, 0.2)" />
+            <stop offset="100%" stopColor="rgba(6, 182, 212, 0)" />
+          </linearGradient>
+
+          <linearGradient id="streamCyan2" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="rgba(6, 182, 212, 0)" />
+            <stop offset="50%" stopColor="rgba(6, 182, 212, 0.15)" />
+            <stop offset="100%" stopColor="rgba(6, 182, 212, 0)" />
+          </linearGradient>
+
+          {/* Radial glow for corner accents */}
+          <radialGradient id="glowTL" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(16, 185, 129, 0.12)" />
+            <stop offset="100%" stopColor="rgba(16, 185, 129, 0)" />
+          </radialGradient>
+          <radialGradient id="glowBR" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(6, 182, 212, 0.1)" />
+            <stop offset="100%" stopColor="rgba(6, 182, 212, 0)" />
+          </radialGradient>
+
+          {/* Vignette */}
+          <radialGradient id="vignette" cx="50%" cy="50%" r="75%">
+            <stop offset="0%" stopColor="rgba(7, 7, 16, 0)" />
+            <stop offset="65%" stopColor="rgba(7, 7, 16, 0.3)" />
+            <stop offset="100%" stopColor="rgba(7, 7, 16, 0.85)" />
+          </radialGradient>
+        </defs>
+
+        {/* Corner glows */}
+        <circle cx="0" cy="0" r="500" fill="url(#glowTL)" />
+        <circle cx="100%" cy="100%" r="500" fill="url(#glowBR)" />
+
+        {/* === Animated flowing streamlines (vector field visualization) === */}
+        {/* Stream 1 — emerald, top-left to center */}
+        <path
+          d="M -50,200 Q 200,120 400,300 T 800,400"
+          fill="none"
+          stroke="url(#streamEmerald)"
+          strokeWidth="2"
+          strokeDasharray="60 120"
+          style={{ animation: 'draw-line 6s linear infinite' }}
+        />
+        {/* Stream 2 — emerald, offset */}
+        <path
+          d="M -50,280 Q 200,200 400,380 T 800,480"
+          fill="none"
+          stroke="url(#streamEmerald)"
+          strokeWidth="1.5"
+          strokeDasharray="40 100"
+          style={{ animation: 'draw-line 8s linear infinite reverse' }}
+        />
+        {/* Stream 3 — cyan, right side flowing down */}
+        <path
+          d="M 1200,100 Q 900,250 700,350 T 300,550"
+          fill="none"
+          stroke="url(#streamCyan)"
+          strokeWidth="2"
+          strokeDasharray="50 130"
+          style={{ animation: 'draw-line 7s linear infinite' }}
+        />
+        {/* Stream 4 — cyan, upper right */}
+        <path
+          d="M 1400,50 Q 1100,180 850,280 T 450,420"
+          fill="none"
+          stroke="url(#streamCyan2)"
+          strokeWidth="1.5"
+          strokeDasharray="30 90"
+          style={{ animation: 'draw-line 9s linear infinite reverse' }}
+        />
+        {/* Stream 5 — emerald, bottom left sweeping up */}
+        <path
+          d="M -50,600 Q 200,500 450,580 T 900,520"
+          fill="none"
+          stroke="url(#streamEmerald)"
+          strokeWidth="1.5"
+          strokeDasharray="35 110"
+          style={{ animation: 'draw-line 10s linear infinite' }}
+        />
+
+        {/* === Rotating polar coordinate rings === */}
+        <g
+          transform="translate(180, 650)"
+          style={{ animation: 'rotate-slow 80s linear infinite', transformOrigin: '180px 650px' }}
+        >
+          <circle r="80" fill="none" stroke="rgba(16, 185, 129, 0.12)" strokeWidth="1" strokeDasharray="4 8" />
+          <circle r="50" fill="none" stroke="rgba(16, 185, 129, 0.1)" strokeWidth="0.8" />
+          <circle r="20" fill="none" stroke="rgba(16, 185, 129, 0.08)" strokeWidth="0.5" />
+          {/* Radial spokes */}
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
+            <line
+              key={angle}
+              x1="0" y1="0"
+              x2={Math.cos((angle * Math.PI) / 180) * 80}
+              y2={Math.sin((angle * Math.PI) / 180) * 80}
+              stroke="rgba(16, 185, 129, 0.06)"
+              strokeWidth="0.5"
+            />
+          ))}
+        </g>
+
+        {/* Second polar grid — top right, opposite rotation */}
+        <g
+          transform="translate(1100, 180)"
+          style={{ animation: 'rotate-slow 120s linear infinite reverse', transformOrigin: '1100px 180px' }}
+        >
+          <circle r="70" fill="none" stroke="rgba(6, 182, 212, 0.12)" strokeWidth="1" strokeDasharray="6 10" />
+          <circle r="42" fill="none" stroke="rgba(6, 182, 212, 0.1)" strokeWidth="0.8" />
+          <circle r="16" fill="none" stroke="rgba(6, 182, 212, 0.08)" strokeWidth="0.5" />
+          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle) => (
+            <line
+              key={angle}
+              x1="0" y1="0"
+              x2={Math.cos((angle * Math.PI) / 180) * 70}
+              y2={Math.sin((angle * Math.PI) / 180) * 70}
+              stroke="rgba(6, 182, 212, 0.05)"
+              strokeWidth="0.5"
+            />
+          ))}
+        </g>
+
+        {/* === Pulsing field-flow dots (sparse, decorative) === */}
+        {[
+          [300, 150], [600, 250], [900, 120], [200, 450],
+          [500, 520], [800, 480], [1050, 400], [400, 700],
+          [750, 680], [1000, 600], [150, 300], [650, 400],
+        ].map(([cx, cy], i) => (
+          <circle
+            key={i}
+            cx={cx}
+            cy={cy}
+            r="2"
+            fill={i % 2 === 0 ? 'rgba(16, 185, 129, 0.4)' : 'rgba(6, 182, 212, 0.35)'}
+            style={{
+              animation: `pulse-glow ${3 + (i % 3)}s ease-in-out infinite`,
+              animationDelay: `${i * 0.4}s`,
+            }}
+          />
+        ))}
+
+        {/* Vignette overlay */}
+        <rect width="100%" height="100%" fill="url(#vignette)" />
+      </svg>
+
+      {/* === Floating mathematical equations — HTML overlay === */}
+      <div className="absolute inset-0 font-mono select-none">
+        <span
+          className="absolute text-base"
+          style={{
+            left: '4%', top: '10%',
+            color: 'rgba(16, 185, 129, 0.25)',
+            animation: 'float-equation 7s ease-in-out infinite',
+          }}
+        >
+          &#8711;f = [&#8706;f/&#8706;x, &#8706;f/&#8706;y, &#8706;f/&#8706;z]
+        </span>
+        <span
+          className="absolute text-base"
+          style={{
+            left: '58%', top: '6%',
+            color: 'rgba(6, 182, 212, 0.22)',
+            animation: 'float-equation 9s ease-in-out infinite',
+            animationDelay: '1s',
+          }}
+        >
+          &#8711;&#183;F = &#8706;F&#8321;/&#8706;x + &#8706;F&#8322;/&#8706;y + &#8706;F&#8323;/&#8706;z
+        </span>
+        <span
+          className="absolute text-base"
+          style={{
+            left: '10%', top: '46%',
+            color: 'rgba(16, 185, 129, 0.25)',
+            animation: 'float-equation 8s ease-in-out infinite',
+            animationDelay: '2s',
+          }}
+        >
+          &#8711;&#215;F = | i&#8202; j&#8202; k |
+        </span>
+        <span
+          className="absolute text-sm"
+          style={{
+            left: '13%', top: '49%',
+            color: 'rgba(16, 185, 129, 0.18)',
+            animation: 'float-equation 8s ease-in-out infinite',
+            animationDelay: '2.2s',
+          }}
+        >
+          &#8202;&#8202;&#8202;&#8202;| &#8706;/&#8706;x &#8706;/&#8706;y &#8706;/&#8706;z |
+        </span>
+        <span
+          className="absolute text-sm"
+          style={{
+            left: '15%', top: '52%',
+            color: 'rgba(16, 185, 129, 0.18)',
+            animation: 'float-equation 8s ease-in-out infinite',
+            animationDelay: '2.4s',
+          }}
+        >
+          &#8202;&#8202;&#8202;&#8202;| F&#8321;&#8202; F&#8322;&#8202; F&#8323; |
+        </span>
+        <span
+          className="absolute text-base"
+          style={{
+            left: '68%', top: '35%',
+            color: 'rgba(6, 182, 212, 0.25)',
+            animation: 'float-equation 6s ease-in-out infinite',
+            animationDelay: '0.5s',
+          }}
+        >
+          F = [-y, x]&#8202;&#8202;&#8594;&#8202;curl = +2
+        </span>
+        <span
+          className="absolute text-base"
+          style={{
+            left: '5%', top: '78%',
+            color: 'rgba(16, 185, 129, 0.25)',
+            animation: 'float-equation 10s ease-in-out infinite',
+            animationDelay: '3s',
+          }}
+        >
+          &#8747;&#8320;&#178; x&#178; dx = 8/3
+        </span>
+        <span
+          className="absolute text-base"
+          style={{
+            left: '50%', top: '70%',
+            color: 'rgba(6, 182, 212, 0.22)',
+            animation: 'float-equation 7s ease-in-out infinite',
+            animationDelay: '1.5s',
+          }}
+        >
+          &#966; &#8776; 1.61803...
+        </span>
+        <span
+          className="absolute text-sm"
+          style={{
+            left: '76%', top: '60%',
+            color: 'rgba(6, 182, 212, 0.2)',
+            animation: 'float-equation 9s ease-in-out infinite',
+            animationDelay: '2.5s',
+          }}
+        >
+          &#955; = (&#964;r &#177; &#8730;(&#964;&#178;-4det)) / 2
+        </span>
+        <span
+          className="absolute text-base"
+          style={{
+            left: '35%', top: '87%',
+            color: 'rgba(16, 185, 129, 0.25)',
+            animation: 'float-equation 8s ease-in-out infinite',
+            animationDelay: '0.8s',
+          }}
+        >
+          e&#8304;^(i&#960;) + 1 = 0
+        </span>
+        <span
+          className="absolute text-sm"
+          style={{
+            left: '82%', top: '85%',
+            color: 'rgba(6, 182, 212, 0.2)',
+            animation: 'float-equation 11s ease-in-out infinite',
+            animationDelay: '3.5s',
+          }}
+        >
+          &#8747; F&#183;dl = &#8747;&#8747; (&#8711;&#215;F)&#183;dS
+        </span>
+      </div>
+    </div>
+  );
+}
+
+
+==================== FILE: src/components/SimulationView.tsx ====================
+import { useCallback, useState } from 'react';
+import { Target, Users, MousePointerClick } from 'lucide-react';
+import VectorCanvas, { type FieldMode } from './VectorCanvas';
+import ControlSidebar from './ControlSidebar';
+
+export default function SimulationView() {
+  const [alpha, setAlpha] = useState(1.0);
+  const [curlIntensity, setCurlIntensity] = useState(1.0);
+  const [mode, setMode] = useState<FieldMode>('rotational');
+  const [metrics, setMetrics] = useState({ divergence: 0, curlMagnitude: 2.0 });
+  const [presetFlash, setPresetFlash] = useState<string | null>(null);
+
+  const handlePreset = (preset: {
+    mode: FieldMode;
+    curl: number;
+    alpha: number;
+    label: string;
+  }) => {
+    setMode(preset.mode);
+    setCurlIntensity(preset.curl);
+    setAlpha(preset.alpha);
+    setPresetFlash(preset.label);
+    setTimeout(() => setPresetFlash(null), 1500);
+  };
+
+  const handleMetricsUpdate = useCallback((m: { divergence: number; curlMagnitude: number }) => {
+    setMetrics(m);
+  }, []);
+
+  const curlAtZero = Math.abs(curlIntensity) < 0.05 && mode === 'rotational';
+
+  return (
+    <div className="max-w-[1400px] mx-auto px-6 py-8 animate-fade-in">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
+        {/* Left: Canvas + challenge + metrics banner */}
+        <div className="space-y-5 min-w-0">
+          {/* Canvas */}
+          <div className="panel p-4 sm:p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="section-header">Vector Field Simulation</h2>
+                <p className="text-xs text-neutral-600 font-mono mt-1">
+                  2D Particle Flow &mdash; {mode === 'rotational' ? 'Rotational F=[-y,x]' : 'Divergent F=[x,y]'}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-neutral-600">
+                <MousePointerClick className="w-3.5 h-3.5" />
+                <span>Click / drag to warp flow</span>
+              </div>
+            </div>
+            <div className="relative rounded-md overflow-hidden bg-neutral-950 border border-neutral-800" style={{ height: 'clamp(380px, 55vh, 560px)' }}>
+              <VectorCanvas
+                alpha={alpha}
+                curlIntensity={curlIntensity}
+                mode={mode}
+                onMetricsUpdate={handleMetricsUpdate}
+              />
+              {/* Preset flash overlay */}
+              {presetFlash && (
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 px-4 py-2 rounded border border-emerald-600/40 bg-neutral-950/90 text-xs font-mono text-emerald-400 animate-slide-up backdrop-blur-sm">
+                  Preset: {presetFlash}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Audience Challenge */}
+          <div className="panel p-5 bar-cyan border-cyan-600/30">
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-md border border-cyan-600/40 bg-cyan-950/20 flex items-center justify-center shrink-0">
+                <Users className="w-5 h-5 text-cyan-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base font-semibold text-neutral-100 mb-2">
+                  Professor / Audience Challenge
+                </h3>
+                <p className="text-sm text-neutral-400 leading-relaxed mb-3">
+                  Can you balance the vectors? Adjust the{' '}
+                  <span className="text-cyan-400 font-medium">Curl Intensity Matrix</span>{' '}
+                  slider to exactly{' '}
+                  <span className="font-mono text-cyan-400">0.0</span> to
+                  stabilize the system.
+                </p>
+                <div
+                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded border text-xs font-mono transition-colors duration-300 ${
+                    curlAtZero
+                      ? 'border-emerald-500/40 bg-emerald-950/20 text-emerald-400'
+                      : 'border-neutral-800 bg-neutral-900/40 text-neutral-500'
+                  }`}
+                >
+                  <Target className="w-3.5 h-3.5" />
+                  {curlAtZero ? 'CHALLENGE COMPLETE — System stabilized!' : `Current curl: ${curlIntensity.toFixed(2)} — target: 0.00`}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Inline metrics (mobile only) */}
+          <div className="grid grid-cols-2 gap-4 lg:hidden">
+            <div className="panel-flat p-4">
+              <div className="section-label mb-1">DIVERGENCE</div>
+              <div className="text-lg font-mono font-bold text-cyan-400 tabular-nums">
+                {metrics.divergence.toFixed(2)}
+              </div>
+            </div>
+            <div className="panel-flat p-4">
+              <div className="section-label mb-1">CURL MAGNITUDE</div>
+              <div className="text-lg font-mono font-bold text-emerald-400 tabular-nums">
+                {metrics.curlMagnitude.toFixed(2)}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Control Sidebar */}
+        <ControlSidebar
+          alpha={alpha}
+          setAlpha={setAlpha}
+          curlIntensity={curlIntensity}
+          setCurlIntensity={setCurlIntensity}
+          mode={mode}
+          setMode={setMode}
+          onPreset={handlePreset}
+          divergence={metrics.divergence}
+          curlMagnitude={metrics.curlMagnitude}
+        />
+      </div>
+    </div>
+  );
+}
+
+
+==================== FILE: src/components/VectorCanvas.tsx ====================
+import { useRef, useEffect, useCallback } from 'react';
+
+export type FieldMode = 'rotational' | 'divergent';
+
+interface VectorCanvasProps {
+  alpha: number;
+  curlIntensity: number;
+  mode: FieldMode;
+  onMetricsUpdate: (metrics: { divergence: number; curlMagnitude: number }) => void;
+}
+
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  trail: { x: number; y: number }[];
+  life: number;
+}
+
+const MAX_PARTICLES = 450;
+const MAX_TRAIL = 18;
+
+export default function VectorCanvas({ alpha, curlIntensity, mode, onMetricsUpdate }: VectorCanvasProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Particle[]>([]);
+  const animRef = useRef<number>(0);
+  const paramsRef = useRef({ alpha, curlIntensity, mode });
+  const sizeRef = useRef({ w: 800, h: 600 });
+
+  // Keep latest params accessible inside the rAF loop without restarting it
+  useEffect(() => {
+    paramsRef.current = { alpha, curlIntensity, mode };
+  }, [alpha, curlIntensity, mode]);
+
+  // Report metrics whenever params change
+  useEffect(() => {
+    const divergence = mode === 'divergent' ? alpha * 2 : 0;
+    const curlMagnitude = mode === 'rotational' ? Math.abs(curlIntensity) * 2 : 0;
+    onMetricsUpdate({ divergence, curlMagnitude });
+  }, [alpha, curlIntensity, mode, onMetricsUpdate]);
+
+  const seedParticle = useCallback((x?: number, y?: number) => {
+    const { w, h } = sizeRef.current;
+    particlesRef.current.push({
+      x: x ?? Math.random() * w,
+      y: y ?? Math.random() * h,
+      vx: 0,
+      vy: 0,
+      trail: [],
+      life: 1,
+    });
+  }, []);
+
+  const seedBatch = useCallback(
+    (cx: number, cy: number, count: number) => {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * 50;
+        seedParticle(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r);
+      }
+    },
+    [seedParticle],
+  );
+
+  // Main effect: set up canvas, rAF loop, and interaction
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      sizeRef.current = { w: rect.width, h: rect.height };
+    };
+
+    resize();
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(canvas);
+
+    // Initial seed
+    const { w, h } = sizeRef.current;
+    particlesRef.current = [];
+    for (let i = 0; i < MAX_PARTICLES; i++) {
+      seedParticle();
     }
-    .text-glow-cyan {
-      text-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
+
+    // Interaction: click/drag to re-seed
+    let isDragging = false;
+    const getPos = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    };
+    const handleDown = (e: PointerEvent) => {
+      isDragging = true;
+      const { x, y } = getPos(e);
+      // Clear nearby particles and seed new ones
+      particlesRef.current = particlesRef.current.filter(
+        (p) => Math.hypot(p.x - x, p.y - y) > 80,
+      );
+      seedBatch(x, y, 60);
+    };
+    const handleMove = (e: PointerEvent) => {
+      if (!isDragging) return;
+      const { x, y } = getPos(e);
+      seedBatch(x, y, 20);
+    };
+    const handleUp = () => {
+      isDragging = false;
+    };
+
+    canvas.addEventListener('pointerdown', handleDown);
+    canvas.addEventListener('pointermove', handleMove);
+    canvas.addEventListener('pointerup', handleUp);
+    canvas.addEventListener('pointerleave', handleUp);
+
+    // Animation loop
+    const render = () => {
+      const { w: cw, h: ch } = sizeRef.current;
+      const { alpha: a, curlIntensity: curl, mode: m } = paramsRef.current;
+      const cx = cw / 2;
+      const cy = ch / 2;
+      const scale = Math.min(cw, ch) / 12; // normalize field strength to canvas size
+
+      // Fade background for trail effect
+      ctx.fillStyle = 'rgba(7, 7, 16, 0.12)';
+      ctx.fillRect(0, 0, cw, ch);
+
+      // Draw subtle grid
+      ctx.strokeStyle = 'rgba(82, 82, 91, 0.06)';
+      ctx.lineWidth = 0.5;
+      const gridStep = 40;
+      ctx.beginPath();
+      for (let gx = 0; gx <= cw; gx += gridStep) {
+        ctx.moveTo(gx, 0);
+        ctx.lineTo(gx, ch);
+      }
+      for (let gy = 0; gy <= ch; gy += gridStep) {
+        ctx.moveTo(0, gy);
+        ctx.lineTo(cw, gy);
+      }
+      ctx.stroke();
+
+      // Draw center crosshair
+      ctx.strokeStyle = 'rgba(82, 82, 91, 0.15)';
+      ctx.beginPath();
+      ctx.moveTo(cx - 12, cy);
+      ctx.lineTo(cx + 12, cy);
+      ctx.moveTo(cx, cy - 12);
+      ctx.lineTo(cx, cy + 12);
+      ctx.stroke();
+
+      const particles = particlesRef.current;
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        const dx = (p.x - cx) / scale;
+        const dy = (p.y - cy) / scale;
+
+        let vx: number;
+        let vy: number;
+
+        if (m === 'rotational') {
+          // F = [-y, x] * curl
+          vx = -dy * curl;
+          vy = dx * curl;
+        } else {
+          // F = [x, y] * alpha
+          vx = dx * a;
+          vy = dy * a;
+        }
+
+        p.vx = vx;
+        p.vy = vy;
+        p.x += p.vx * 1.5;
+        p.y += p.vy * 1.5;
+        p.life -= 0.003;
+
+        // Trail
+        p.trail.push({ x: p.x, y: p.y });
+        if (p.trail.length > MAX_TRAIL) p.trail.shift();
+
+        // Determine color based on speed
+        const speed = Math.hypot(p.vx, p.vy);
+        const hue = m === 'rotational' ? 160 : 190; // emerald for rotation, cyan for divergence
+        const lightness = Math.min(70, 45 + speed * 2);
+
+        // Draw trail
+        if (p.trail.length > 1) {
+          for (let t = 0; t < p.trail.length - 1; t++) {
+            const trailAlpha = (t / p.trail.length) * 0.6 * p.life;
+            ctx.strokeStyle = `hsla(${hue}, 80%, ${lightness}%, ${trailAlpha})`;
+            ctx.lineWidth = (t / p.trail.length) * 2.5;
+            ctx.beginPath();
+            ctx.moveTo(p.trail[t].x, p.trail[t].y);
+            ctx.lineTo(p.trail[t + 1].x, p.trail[t + 1].y);
+            ctx.stroke();
+          }
+        }
+
+        // Draw particle head
+        ctx.fillStyle = `hsla(${hue}, 90%, ${lightness}%, ${p.life})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Reseed if out of bounds or dead
+        if (
+          p.x < -20 || p.x > cw + 20 ||
+          p.y < -20 || p.y > ch + 20 ||
+          p.life <= 0
+        ) {
+          particles.splice(i, 1);
+          seedParticle();
+        }
+      }
+
+      // Maintain particle count
+      while (particles.length < MAX_PARTICLES) {
+        seedParticle();
+      }
+
+      animRef.current = requestAnimationFrame(render);
+    };
+
+    animRef.current = requestAnimationFrame(render);
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      resizeObserver.disconnect();
+      canvas.removeEventListener('pointerdown', handleDown);
+      canvas.removeEventListener('pointermove', handleMove);
+      canvas.removeEventListener('pointerup', handleUp);
+      canvas.removeEventListener('pointerleave', handleUp);
+    };
+  }, [seedParticle, seedBatch]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="w-full h-full cursor-crosshair touch-none"
+      style={{ display: 'block' }}
+    />
+  );
+}
+
+
+==================== FILE: src/index.css ====================
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-950 text-neutral-300 font-sans antialiased;
+  }
+
+  h1, h2, h3 {
+    @apply font-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-950;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-800 rounded;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-700;
+  }
+}
+
+@layer components {
+  /* === CORE PANELS === */
+  .panel {
+    @apply bg-neutral-900/40 border border-neutral-800/80 rounded-lg backdrop-blur-md;
+  }
+
+  .panel-inner {
+    @apply bg-neutral-900/30 border border-neutral-800/60 rounded-lg;
+  }
+
+  .panel-flat {
+    @apply bg-neutral-950 border border-neutral-800/50 rounded-lg;
+  }
+
+  /* === ACCENT BORDERS (hairline tints, no glow) === */
+  .accent-emerald {
+    @apply border-emerald-600/40;
+  }
+
+  .accent-cyan {
+    @apply border-cyan-600/40;
+  }
+
+  .accent-red {
+    @apply border-red-600/40;
+  }
+
+  /* === TEXT ACCENTS === */
+  .text-accent-emerald {
+    @apply text-emerald-400;
+  }
+
+  .text-accent-cyan {
+    @apply text-cyan-400;
+  }
+
+  /* === LEFT ACCENT BAR (status panels) === */
+  .bar-emerald {
+    border-left: 3px solid rgb(5 150 105);
+  }
+
+  .bar-red {
+    border-left: 3px solid rgb(220 38 38);
+  }
+
+  .bar-cyan {
+    border-left: 3px solid rgb(8 145 178);
+  }
+
+  /* === SVG GRID BACKGROUNDS === */
+  .grid-fine {
+    background-image:
+      linear-gradient(rgba(82, 82, 91, 0.05) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(82, 82, 91, 0.05) 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
+  }
+
+  .grid-coarse {
+    background-image:
+      linear-gradient(rgba(82, 82, 91, 0.08) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(82, 82, 91, 0.08) 0.5px, transparent 0.5px);
+    background-size: 80px 80px;
+  }
+
+  .grid-both {
+    background-image:
+      linear-gradient(rgba(82, 82, 91, 0.04) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(82, 82, 91, 0.04) 0.5px, transparent 0.5px),
+      linear-gradient(rgba(82, 82, 91, 0.07) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(82, 82, 91, 0.07) 0.5px, transparent 0.5px);
+    background-size: 20px 20px, 20px 20px, 80px 80px, 80px 80px;
+  }
+
+  /* === SECTION HEADER === */
+  .section-header {
+    @apply text-base font-semibold text-neutral-100 tracking-tight;
+    font-family: 'Newsreader', Georgia, serif;
+  }
+
+  .section-label {
+    @apply text-xs font-medium tracking-[0.08em] text-neutral-500;
+  }
+
+  /* === DATA TAG === */
+  .data-tag {
+    @apply inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-neutral-800/70 bg-neutral-900/50 text-xs font-mono text-neutral-400;
+  }
+}
+
+/* Range slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  height: 20px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 3px;
+  background: #27272a;
+  border: 1px solid #3f3f46;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid #052e22;
+  margin-top: -6px;
+  transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #34d399;
+  transform: scale(1.15);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 5px;
+  border-radius: 3px;
+  background: #27272a;
+  border: 1px solid #3f3f46;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid #052e22;
+}
+
+
+==================== FILE: src/main.tsx ====================
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+
+
+==================== FILE: src/utils/codeGenerator.ts ====================
+export interface GeneratedCode {
+  description: string;
+  code: string;
+}
+
+interface QueryPattern {
+  match: RegExp;
+  generate: (query: string) => GeneratedCode;
+}
+
+const patterns: QueryPattern[] = [
+  {
+    match: /gradient|∇f|partial derivative|∂f/i,
+    generate: () => ({
+      description: 'Numerical gradient of f(x,y) = x² + y² at point (1, 2)',
+      code: `// Gradient of f(x,y) = x^2 + y^2
+// ∇f = [∂f/∂x, ∂f/∂y] = [2x, 2y]
+
+function gradient(fn, x, y, h) {
+  const dfx = (fn(x + h, y) - fn(x - h, y)) / (2 * h);
+  const dfy = (fn(x, y + h) - fn(x, y - h)) / (2 * h);
+  return [dfx, dfy];
+}
+
+const f = (x, y) => x*x + y*y;
+const h = 0.0001;
+
+const grad = gradient(f, 1, 2);
+console.log("f(x,y) = x^2 + y^2");
+console.log("Gradient at (1, 2):");
+console.log("  ∂f/∂x =", grad[0].toFixed(4));
+console.log("  ∂f/∂y =", grad[1].toFixed(4));
+console.log("  ∇f    = [" + grad[0].toFixed(2) + ", " + grad[1].toFixed(2) + "]");`,
+    }),
+  },
+  {
+    match: /diverg|∇·|∇\.|flux|source|sink/i,
+    generate: () => ({
+      description: 'Divergence of F = [x, y] using central differences',
+      code: `// Divergence of F = [x, y]
+// ∇·F = ∂F₁/∂x + ∂F₂/∂y = 1 + 1 = 2
+
+function divergence(Fx, Fy, x, y, h) {
+  const dFx = (Fx(x + h, y) - Fx(x - h, y)) / (2 * h);
+  const dFy = (Fy(x, y + h) - Fy(x, y - h)) / (2 * h);
+  return dFx + dFy;
+}
+
+const Fx = (x, y) => x;
+const Fy = (x, y) => y;
+const h = 0.0001;
+
+const div = divergence(Fx, Fy, 3, 4, h);
+console.log("F = [x, y]");
+console.log("Divergence at (3, 4):");
+console.log("  ∇·F =", div.toFixed(4));
+console.log("  (constant = 2 everywhere)");`,
+    }),
+  },
+  {
+    match: /curl|∇×|∇x|rotational|rotation|vorticity/i,
+    generate: () => ({
+      description: 'Curl of F = [-y, x] — 2D rotational field',
+      code: `// Curl of F = [-y, x] (2D)
+// ∇×F = ∂F₂/∂x - ∂F₁/∂y = 1 - (-1) = 2
+
+function curl2D(Fx, Fy, x, y, h) {
+  const dFy_dx = (Fy(x + h, y) - Fy(x - h, y)) / (2 * h);
+  const dFx_dy = (Fx(x, y + h) - Fx(x, y - h)) / (2 * h);
+  return dFy_dx - dFx_dy;
+}
+
+const Fx = (x, y) => -y;
+const Fy = (x, y) => x;
+const h = 0.0001;
+
+const curl = curl2D(Fx, Fy, 2, 3, h);
+console.log("F = [-y, x]");
+console.log("Curl at (2, 3):");
+console.log("  ∇×F =", curl.toFixed(4));
+console.log("  (constant = +2, CCW rotation)");`,
+    }),
+  },
+  {
+    match: /meshgrid|grid|linspace|quiver|vector field/i,
+    generate: () => ({
+      description: 'Meshgrid + quiver simulation (JavaScript equivalent)',
+      code: `// Equivalent of Octave meshgrid + quiver
+// Generates a 5x5 grid and computes F = [-y, x]
+
+function linspace(start, end, n) {
+  const step = (end - start) / (n - 1);
+  return Array.from({length: n}, (_, i) => start + i * step);
+}
+
+function meshgrid(x, y) {
+  const X = y.map(() => [...x]);
+  const Y = y.map(yv => x.map(() => yv));
+  return [X, Y];
+}
+
+const x = linspace(-2, 2, 5);
+const y = linspace(-2, 2, 5);
+const [X, Y] = meshgrid(x, y);
+
+console.log("Grid points (5x5):");
+for (let i = 0; i < 5; i++) {
+  for (let j = 0; j < 5; j++) {
+    const vx = -Y[i][j];  // F = [-y, x]
+    const vy = X[i][j];
+    console.log("  (" + X[i][j].toFixed(1) + "," + Y[i][j].toFixed(1) + ") -> [" + vx.toFixed(1) + ", " + vy.toFixed(1) + "]");
+  }
+}`,
+    }),
+  },
+  {
+    match: /matrix|eigen|determinant|det|inverse|linear algebra/i,
+    generate: () => ({
+      description: 'Matrix determinant and trace computation',
+      code: `// 2x2 Matrix operations
+// det(A) = ad - bc,  trace(A) = a + d
+
+function det2(m) {
+  return m[0][0]*m[1][1] - m[0][1]*m[1][0];
+}
+
+function trace2(m) {
+  return m[0][0] + m[1][1];
+}
+
+const A = [[4, 2], [1, 3]];
+console.log("Matrix A = [[4, 2], [1, 3]]");
+console.log("  det(A)   =", det2(A));
+console.log("  trace(A) =", trace2(A));
+console.log("  eigenvalues: lambda = (trace ± sqrt(trace²-4*det)) / 2");
+
+const tr = trace2(A);
+const dt = det2(A);
+const disc = Math.sqrt(tr*tr - 4*dt);
+const l1 = (tr + disc) / 2;
+const l2 = (tr - disc) / 2;
+console.log("  lambda_1 =", l1.toFixed(4));
+console.log("  lambda_2 =", l2.toFixed(4));`,
+    }),
+  },
+  {
+    match: /integral|∫|antiderivative|area under|definite/i,
+    generate: () => ({
+      description: 'Numerical integration via Simpson\'s rule',
+      code: `// Numerical integration: ∫₀² x² dx
+// Simpson's Rule: (h/3)[f(x₀) + 4f(x₁) + 2f(x₂) + ... + f(xₙ)]
+
+function simpsonsRule(fn, a, b, n) {
+  if (n % 2 !== 0) n++;
+  const h = (b - a) / n;
+  let sum = fn(a) + fn(b);
+  for (let i = 1; i < n; i++) {
+    sum += (i % 2 === 0 ? 2 : 4) * fn(a + i * h);
+  }
+  return (h / 3) * sum;
+}
+
+const f = x => x * x;
+const result = simpsonsRule(f, 0, 2, 100);
+const exact = 8 / 3;
+
+console.log("∫₀² x² dx");
+console.log("  Simpson's (n=100):", result.toFixed(6));
+console.log("  Exact (8/3):      ", exact.toFixed(6));
+console.log("  Error:            ", Math.abs(result - exact).toExponential(2));`,
+    }),
+  },
+  {
+    match: /fibonacci|fib/i,
+    generate: () => ({
+      description: 'Fibonacci sequence generator',
+      code: `// Fibonacci sequence: F(n) = F(n-1) + F(n-2)
+
+function fibonacci(n) {
+  const seq = [0, 1];
+  for (let i = 2; i < n; i++) {
+    seq.push(seq[i-1] + seq[i-2]);
+  }
+  return seq.slice(0, n);
+}
+
+const fib = fibonacci(15);
+console.log("Fibonacci sequence (first 15):");
+console.log("  " + fib.join(", "));
+console.log("  Golden ratio approximation: " + (fib[14]/fib[13]).toFixed(6));
+console.log("  φ (exact): 1.618034...");`,
+    }),
+  },
+  {
+    match: /prime|sieve|factor/i,
+    generate: () => ({
+      description: 'Sieve of Eratosthenes — prime number generation',
+      code: `// Sieve of Eratosthenes
+// Find all primes up to N
+
+function sieveOfEratosthenes(n) {
+  const isPrime = new Array(n + 1).fill(true);
+  isPrime[0] = isPrime[1] = false;
+  for (let p = 2; p * p <= n; p++) {
+    if (isPrime[p]) {
+      for (let i = p * p; i <= n; i += p) {
+        isPrime[i] = false;
+      }
     }
-    .text-glow-emerald {
-      text-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+  }
+  return isPrime.map((v, i) => v ? i : -1).filter(i => i > 0);
+}
+
+const primes = sieveOfEratosthenes(100);
+console.log("Primes up to 100:");
+console.log("  Count:", primes.length);
+console.log("  " + primes.join(", "));`,
+    }),
+  },
+  {
+    match: /hello|test|demo|example|sample/i,
+    generate: () => ({
+      description: 'Basic JavaScript execution demo',
+      code: `// Demo: variable assignment and math
+const a = 10;
+const b = 3.14159;
+const sum = a + b;
+const product = a * b;
+
+console.log("a =", a);
+console.log("b =", b);
+console.log("a + b =", sum.toFixed(5));
+console.log("a * b =", product.toFixed(5));
+console.log("Math.sqrt(a) =", Math.sqrt(a).toFixed(4));
+console.log("Math.pow(a, 2) =", Math.pow(a, 2));`,
+    }),
+  },
+];
+
+const DEFAULT_CODE: GeneratedCode = {
+  description: 'Default: basic math evaluation',
+  code: `// Enter a query like "gradient", "divergence", "curl",
+// "meshgrid", "matrix", "integral", "fibonacci", or "primes"
+const x = 42;
+const y = Math.PI;
+console.log("x =", x);
+console.log("y =", y.toFixed(6));
+console.log("x * y =", (x * y).toFixed(6));`,
+};
+
+export function generateCode(query: string): GeneratedCode {
+  const trimmed = query.trim();
+  if (!trimmed) return DEFAULT_CODE;
+
+  for (const pattern of patterns) {
+    if (pattern.match.test(trimmed)) {
+      return pattern.generate(trimmed);
     }
-    .text-glow-violet {
-      text-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+  }
+
+  // Fallback: try to eval the expression directly
+  return {
+    description: `Evaluating: ${trimmed}`,
+    code: `// User expression evaluation
+const result = (() => {
+  try {
+    return ${trimmed};
+  } catch (e) {
+    return "Error: " + e.message;
+  }
+})();
+console.log("Input: ${trimmed.replace(/"/g, '\\"')}");
+console.log("Result:", result);`,
+  };
+}
+
+
+==================== FILE: src/utils/codeSandbox.ts ====================
+export interface SandboxResult {
+  success: boolean;
+  output: string[];
+  error: string | null;
+  executionTime: number;
+}
+
+const WORKER_SCRIPT = `
+self.onmessage = function(e) {
+  const { code } = e.data;
+  const logs = [];
+  let hadError = false;
+  let errorMsg = null;
+
+  const originalLog = console.log;
+  const originalError = console.error;
+  const originalWarn = console.warn;
+  const originalInfo = console.info;
+
+  const captureArgs = (args) => {
+    return args.map(arg => {
+      if (typeof arg === 'object' && arg !== null) {
+        try { return JSON.stringify(arg, null, 2); } catch { return String(arg); }
+      }
+      if (typeof arg === 'function') return '[Function]';
+      return String(arg);
+    }).join(' ');
+  };
+
+  console.log = (...args) => { logs.push(captureArgs(args)); };
+  console.error = (...args) => { logs.push(captureArgs(args)); };
+  console.warn = (...args) => { logs.push(captureArgs(args)); };
+  console.info = (...args) => { logs.push(captureArgs(args)); };
+
+  const start = performance.now();
+
+  try {
+    const fn = new Function('console', 'Math', 'JSON', code);
+    const result = fn(console, Math, JSON);
+    if (result !== undefined) {
+      logs.push(typeof result === 'object' ? JSON.stringify(result, null, 2) : String(result));
     }
+  } catch (err) {
+    hadError = true;
+    const lineMatch = err.stack && err.stack.match(/<anonymous>:(\\d+):(\\d+)/);
+    const line = lineMatch ? parseInt(lineMatch[1]) - 2 : 0;
+    errorMsg = 'Runtime Error: ' + err.message + (line ? ' at line ' + line : '');
+  }
+
+  const elapsed = performance.now() - start;
+
+  console.log = originalLog;
+  console.error = originalError;
+  console.warn = originalWarn;
+  console.info = originalInfo;
+
+  self.postMessage({
+    success: !hadError,
+    output: logs,
+    error: errorMsg,
+    executionTime: Math.round(elapsed * 1000) / 1000
+  });
+};
+`;
+
+let worker: Worker | null = null;
+let workerUrl: string | null = null;
+
+function getWorker(): Worker {
+  if (!worker) {
+    const blob = new Blob([WORKER_SCRIPT], { type: 'application/javascript' });
+    workerUrl = URL.createObjectURL(blob);
+    worker = new Worker(workerUrl);
+  }
+  return worker;
+}
+
+export function executeCode(code: string): Promise<SandboxResult> {
+  return new Promise((resolve) => {
+    const w = getWorker();
+
+    const handler = (e: MessageEvent) => {
+      w.removeEventListener('message', handler);
+      resolve(e.data as SandboxResult);
+    };
+
+    w.addEventListener('message', handler);
+    w.postMessage({ code });
+  });
+}
+
+export function terminateWorker() {
+  if (worker) {
+    worker.terminate();
+    worker = null;
+  }
+  if (workerUrl) {
+    URL.revokeObjectURL(workerUrl);
+    workerUrl = null;
+  }
+}
+
+
+==================== FILE: src/vite-env.d.ts ====================
+/// <reference types="vite/client" />
